@@ -18,7 +18,7 @@
 
         <!-- ItemsSource="{Binding DataView, ElementName=dataServiceDataSource}" -->
         <!-- {Binding PagedSource, ElementName=RadPagerPaises} -->
-        <telerik:RadGridView x:Name="gridView" Grid.Row="0" ItemsSource="{Binding DataView, ElementName=dataServiceDataSource}" IsBusy="{Binding IsBusy, ElementName=customersDataSource}" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top"
+        <telerik:RadGridView x:Name="gridView" Grid.Row="0" ItemsSource="{Binding DataView, ElementName=dataServiceDataSource}" IsBusy="{Binding IsBusy, ElementName=dataServiceDataSource}" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top"
                              AddingNewDataItem="gridView_NewItem" RowEditEnded="gridView_RowEditEnded" BeginningEdit="gridView_BeginningEdit" CellValidating="gridView_CellValidating" RowValidating="gridView_RowValidating" Loaded="gridView_Loaded" CellEditEnded="gridView_CellEditEnded" Height="227" Width="360" DataLoaded="gridView_DataLoaded" RowLoaded="gridView_RowLoaded"
                              ShowGroupPanel="False" CanUserReorderColumns="False"/>
 
@@ -31,6 +31,7 @@
         <telerik:RadLegend HorizontalAlignment="Left" Height="100" Margin="269,216,0,0" VerticalAlignment="Top" Width="100"/>
         <TextBox x:Name="txtDebug" HorizontalAlignment="Left" Height="42" Margin="10,291,0,0" TextWrapping="Wrap" Text="" IsReadOnly="True" VerticalAlignment="Top" Width="488"/>
         <telerik:RadButton x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left" Margin="415,157,0,0" VerticalAlignment="Top" Width="83" Click="btnDelete_Click"/>
+        <telerik:RadButton x:Name="btnProvincias" Content="Provincias" HorizontalAlignment="Left" Margin="415,216,0,0" VerticalAlignment="Top" Height="26" Width="83" Click="btnProvincias_Click"/>
 
 
     </Grid>
