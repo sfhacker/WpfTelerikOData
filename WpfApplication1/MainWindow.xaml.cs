@@ -1,4 +1,4 @@
-﻿
+
 namespace WpfApplication1
 {
     using com.cairone.odataexample;
@@ -20,6 +20,7 @@ namespace WpfApplication1
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            var isEnabled = this.RadPagerPaises.IsEnabled;
         }
 
         private void btnSaveAllChanges_Click(object sender, RoutedEventArgs e)
@@ -216,6 +217,14 @@ namespace WpfApplication1
             {
                 this.txtDebug.Text += "<-- Server replied in {0} ms\r\n";
             }
+
+            // this value set at whatever value is specified in 'PageSize' xml element
+            // if less than the total number of rows
+            // i believe this is wrong!
+            // Fixed in the service side. Thanks Diego.
+            // http://www.telerik.com/forums/raddatapager-not-loading-all-records-when-loading
+            // http://www.telerik.com/forums/raddatapager-displays-just-one-page
+            var totalCount = e.TotalEntityCount;
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -258,6 +267,18 @@ namespace WpfApplication1
             if (e.Row.IsSelected)
             {
                 e.GridViewDataControl.CurrentItem = null;
+            }
+        }
+
+        private void RadPagerPaises_PageIndexChanged(object sender, Telerik.Windows.Controls.PageIndexChangedEventArgs e)
+        {
+            if (this.gridView.HasItems)
+            {
+                int skip = (e.NewPageIndex * this.RadPagerPaises.PageSize);
+                int take = this.RadPagerPaises.PageSize;
+
+                //this.listBox.ItemsSource = this.data.Skip(e.NewPageIndex * this.radDataPager.PageSize).Take(this.radDataPager.PageSize).ToList();
+
             }
         }
     }
