@@ -1,0 +1,35 @@
+﻿<Window x:Class="WpfApplication1.View.ProvinciasView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication1"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="ProvinciasView" Height="379.674" Width="521.138">
+    <Grid Margin="0,0,0,-31">
+        <telerik:RadDataServiceDataSource x:Name="dataServiceDataSource" HorizontalAlignment="Left" Height="100" Margin="30,10,0,0" VerticalAlignment="Top" Width="100"
+                 AutoLoad="True" IsEnabled="True"  QueryName="Provincias" SubmittingChanges="OnDataSourceSubmittingChanges" SubmittedChanges="OnDataSourceSubmittedChanges" LoadingData="OnDataSourceLoadingData" LoadedData="OnDataSourceLoadedData">
+            <telerik:RadDataServiceDataSource.DataServiceContext>
+                <local:ODataServiceContext/>
+            </telerik:RadDataServiceDataSource.DataServiceContext>
+        </telerik:RadDataServiceDataSource>
+
+        <!-- ItemsSource="{Binding DataView, ElementName=dataServiceDataSource}" -->
+        <!-- {Binding PagedSource, ElementName=RadPagerPaises} -->
+        <telerik:RadGridView x:Name="gridView" Grid.Row="0" ItemsSource="{Binding DataView, ElementName=dataServiceDataSource}" IsBusy="{Binding IsBusy, ElementName=dataServiceDataSource}" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top"
+                             AddingNewDataItem="gridView_NewItem" RowEditEnded="gridView_RowEditEnded" BeginningEdit="gridView_BeginningEdit" CellValidating="gridView_CellValidating" RowValidating="gridView_RowValidating" Loaded="gridView_Loaded" CellEditEnded="gridView_CellEditEnded" Height="227" Width="360" DataLoaded="gridView_DataLoaded" RowLoaded="gridView_RowLoaded"
+                             ShowGroupPanel="False" CanUserReorderColumns="False"/>
+
+        <!-- Source="{Binding DataView, ElementName=dataServiceDataSource}" -->
+        <telerik:RadDataPager x:Name="RadPagerProvincias" Margin="10,0,157,76" Height="29" Grid.Row="1" PageSize="5" Source="{Binding DataView, ElementName=dataServiceDataSource}" VerticalAlignment="Bottom" PageIndexChanged="RadPagerProvincias_PageIndexChanged"/>
+
+        <telerik:RadButton x:Name="btnSaveAllchanges" Content="Save All" HorizontalAlignment="Left" Height="Auto" Margin="415,37,0,0" VerticalAlignment="Top" Width="83" Click="btnSaveAllChanges_Click"/>
+        <telerik:RadButton x:Name="btnCancelAllChanges" Content="Cancel All" HorizontalAlignment="Left" Height="Auto" Margin="415,73,0,0" VerticalAlignment="Top" Width="83" Click="btnCancelAllChanges_Click"/>
+        <telerik:RadButton x:Name="btnNewProvincia" Content="New" HorizontalAlignment="Left" Height="Auto" Margin="415,120,0,0" VerticalAlignment="Top" Width="83" Click="btnNewProvincia_New"/>
+        <telerik:RadLegend HorizontalAlignment="Left" Height="100" Margin="269,216,0,0" VerticalAlignment="Top" Width="100"/>
+        <TextBox x:Name="txtDebug" HorizontalAlignment="Left" Height="42" Margin="10,291,0,0" TextWrapping="Wrap" Text="" IsReadOnly="True" VerticalAlignment="Top" Width="488"/>
+        <telerik:RadButton x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left" Margin="415,157,0,0" VerticalAlignment="Top" Width="83" Click="btnDelete_Click"/>
+        <telerik:RadButton x:Name="btnCities" Content="Localidades" HorizontalAlignment="Left" Margin="415,216,0,0" VerticalAlignment="Top" Height="26" Width="83" Click="btnCities_Click"/>
+    </Grid>
+</Window>
