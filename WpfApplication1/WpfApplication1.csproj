@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -64,16 +64,25 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Telerik.Windows.Controls, Version=2017.1.222.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Controls, Version=2017.1.222.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Data">
+      <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Controls.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Telerik.Windows.Controls.DataServices60, Version=2017.1.222.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Controls.DataServices60.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Controls.DataServices60.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Windows.Controls.GridView, Version=2017.1.222.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Controls.GridView, Version=2017.1.222.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Controls.GridView.dll</HintPath>
+    </Reference>
     <Reference Include="Telerik.Windows.Controls.ImageEditor">
       <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Controls.ImageEditor.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Windows.Controls.Input, Version=2017.1.222.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Controls.Input, Version=2017.1.222.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Controls.Input.dll</HintPath>
+    </Reference>
     <Reference Include="Telerik.Windows.Controls.Navigation">
       <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Controls.Navigation.dll</HintPath>
     </Reference>
@@ -83,7 +92,9 @@
     <Reference Include="Telerik.Windows.Controls.RichTextBoxUI">
       <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Controls.RichTextBoxUI.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Windows.Data, Version=2017.1.222.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Data, Version=2017.1.222.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Telerik.Windows.Documents">
       <HintPath>D:\Program Files (x86)\Telerik\UI for WPF R1 2017\Binaries\WPF45\Telerik.Windows.Documents.dll</HintPath>
     </Reference>
@@ -100,6 +111,13 @@
     </ApplicationDefinition>
     <Compile Include="Filters\CustomKeyboardCommandProvider.cs" />
     <Compile Include="Service References\ODataService\Reference.cs" />
+    <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="View\LocalidadesView.xaml.cs">
+      <DependentUpon>LocalidadesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProvinciasView.xaml.cs">
+      <DependentUpon>ProvinciasView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -112,6 +130,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\LocalidadesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProvinciasView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ODataServiceContext.cs" />
@@ -133,7 +159,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
