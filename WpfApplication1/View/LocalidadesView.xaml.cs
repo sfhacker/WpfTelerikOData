@@ -1,4 +1,4 @@
-﻿
+
 namespace WpfApplication1.View
 {
     using Microsoft.OData.Client;
@@ -7,7 +7,8 @@ namespace WpfApplication1.View
     using Telerik.Windows.Controls.GridView;
     using Telerik.Windows.Data;
     using WpfApplication1.Filters;
-    using Telerik.Windows.Controls;
+
+    using com.cairone.odataexample;
 
     /// <summary>
     /// Lógica de interacción para LocalidadesView.xaml
@@ -58,16 +59,26 @@ namespace WpfApplication1.View
 
         private void btnCancelAllChanges_Click(object sender, RoutedEventArgs e)
         {
-            this.dataServiceDataSource.CancelSubmit();
+            //this.dataServiceDataSource.CancelSubmit();
+            this.dataServiceDataSource.RejectChanges();
         }
 
         private void btnNewCity_New(object sender, RoutedEventArgs e)
         {
-            this.gridView.BeginInsert();
+            var rst = this.gridView.BeginInsert();
+
         }
 
+        /// <summary>
+        /// We need this event since there are two constructors
+        /// When the user clicks on 'New' button or presses Ins key
+        /// nothing happens if we do not add the code below.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void gridView_NewItem(object sender, Telerik.Windows.Controls.GridView.GridViewAddingNewEventArgs e)
         {
+            e.NewObject = new Localidad() { paisId = this.paisId, provinciaId = this.provinciaId };
         }
 
         private void gridView_CellEditEnded(object sender, Telerik.Windows.Controls.GridViewCellEditEndedEventArgs e)
@@ -103,6 +114,8 @@ namespace WpfApplication1.View
         {
             this.gridView.KeyboardCommandProvider = new CustomKeyboardCommandProvider(this.gridView);
 
+            this.gridView.FilterDescriptors.Clear();
+
             // seems to work
             // but where should i put it
             if (this.paisId != -1 && this.provinciaId != -1)
@@ -112,8 +125,8 @@ namespace WpfApplication1.View
                 FilterDescriptor fd_paisId = new FilterDescriptor(PAIS_ID_ELEMENT, FilterOperator.IsEqualTo, this.paisId);
                 FilterDescriptor fd_provinciaId = new FilterDescriptor(PROVINCIA_ID_ELEMENT, FilterOperator.IsEqualTo, this.provinciaId);
 
-                this.dataServiceDataSource.FilterDescriptors.Add(fd_paisId);
-                this.dataServiceDataSource.FilterDescriptors.Add(fd_provinciaId);
+                this.gridView.FilterDescriptors.Add(fd_paisId);
+                this.gridView.FilterDescriptors.Add(fd_provinciaId);
             }
         }
 
