@@ -7,6 +7,7 @@ namespace WpfApplication1
     using System;
     using System.Windows;
     using Telerik.Windows.Controls.GridView;
+    using View;
 
     /// <summary>
     /// Lógica de interacción para MainWindow.xaml
@@ -44,6 +45,8 @@ namespace WpfApplication1
                 {
                     this.txtDebug.Text += string.Format("<-- Extra error info: {0}\r\n", e.Error.InnerException.Message);
                 }
+
+                this.dataServiceDataSource.RejectChanges();
             }
         }
 
@@ -231,6 +234,8 @@ namespace WpfApplication1
         {
             if (this.gridView.SelectedItems.Count == 0)
             {
+                System.Windows.MessageBox.Show("Debe seleccionar un pais.", "Paises", MessageBoxButton.OK, MessageBoxImage.Stop);
+
                 return;
             }
 
@@ -241,12 +246,19 @@ namespace WpfApplication1
                 itemsToRemove.Add(item);
             }
 
-            foreach (var item in itemsToRemove)
-            {
-                (this.gridView.ItemsSource as Telerik.Windows.Data.DataItemCollection).Remove(item);
-            }
+            MessageBoxResult rst = System.Windows.MessageBox.Show(string.Format("Esta seguro de querer eliminar {0} item(s)?", itemsToRemove.Count), "Paises", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
+            if (rst == MessageBoxResult.Yes)
+            {
+                // I want to remove this/these item(s) provided no errors
+                foreach (var item in itemsToRemove)
+                {
+                    (this.gridView.ItemsSource as Telerik.Windows.Data.DataItemCollection).Remove(item);
+                }
+            }
             // Can we issue a SubmitChanges() method here instead of clicking 'Save all'
+            // Something funny happens here!
+            // The DataPager goes bananas!
         }
 
         private void gridView_DataLoaded(object sender, EventArgs e)
@@ -280,6 +292,23 @@ namespace WpfApplication1
                 //this.listBox.ItemsSource = this.data.Skip(e.NewPageIndex * this.radDataPager.PageSize).Take(this.radDataPager.PageSize).ToList();
 
             }
+        }
+
+        private void btnProvincias_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.gridView.SelectedItems.Count == 0)
+            {
+                return;
+            }
+            var newPais = (Pais)this.gridView.SelectedItems[0];
+            if (newPais == null)
+            {
+                return;
+            }
+
+            var provWin = new ProvinciasView(newPais.id);
+
+            provWin.ShowDialog();
         }
     }
 }
