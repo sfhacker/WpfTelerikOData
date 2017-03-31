@@ -1,17 +1,13 @@
-﻿<Window x:Class="WpfApplication1.View.LocalidadesView"
+<Window x:Class="WpfApplication1.View.LocalidadesView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApplication1"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-        xmlns:my="clr-namespace:WpfApplication1.ViewModel"
         mc:Ignorable="d"
         Title="LocalidadesView" Height="436.82" Width="548.536">
-    <Window.Resources>
-        <my:ViewModel x:Key="viewModel" />
-    </Window.Resources>
-    <Grid DataContext="{StaticResource viewModel}">
+    <Grid Margin="0,0,0,40">
         <telerik:RadDataServiceDataSource x:Name="dataServiceDataSource" HorizontalAlignment="Left" Height="100" Margin="30,10,0,0" VerticalAlignment="Top" Width="100"
                  AutoLoad="True" IsEnabled="True"  QueryName="Localidades" SubmittingChanges="OnDataSourceSubmittingChanges" SubmittedChanges="OnDataSourceSubmittedChanges" LoadingData="OnDataSourceLoadingData" LoadedData="OnDataSourceLoadedData">
             <telerik:RadDataServiceDataSource.DataServiceContext>
@@ -26,13 +22,13 @@
                              ShowGroupPanel="False" CanUserReorderColumns="False"/>
 
         <!-- Source="{Binding DataView, ElementName=dataServiceDataSource}" -->
-        <telerik:RadDataPager x:Name="RadPagerLocalidades" Margin="10,0,157,76" Height="29" Grid.Row="1" PageSize="5" Source="{Binding DataView, ElementName=dataServiceDataSource}" VerticalAlignment="Bottom" PageIndexChanged="RadPagerLocalidades_PageIndexChanged"/>
+        <telerik:RadDataPager x:Name="RadPagerLocalidades" Margin="10,0,157,79" Height="29" PageSize="5" Source="{Binding DataView, ElementName=dataServiceDataSource}" VerticalAlignment="Bottom" PageIndexChanged="RadPagerLocalidades_PageIndexChanged"/>
 
         <telerik:RadButton x:Name="btnSaveAllchanges" Content="Save All" HorizontalAlignment="Left" Height="Auto" Margin="415,37,0,0" VerticalAlignment="Top" Width="83" Click="btnSaveAllChanges_Click"/>
         <telerik:RadButton x:Name="btnCancelAllChanges" Content="Cancel All" HorizontalAlignment="Left" Height="Auto" Margin="415,73,0,0" VerticalAlignment="Top" Width="83" Click="btnCancelAllChanges_Click"/>
         <telerik:RadButton x:Name="btnNewCity" Content="New" HorizontalAlignment="Left" Height="Auto" Margin="415,120,0,0" VerticalAlignment="Top" Width="83" Click="btnNewCity_New"/>
         <telerik:RadLegend HorizontalAlignment="Left" Height="100" Margin="269,216,0,0" VerticalAlignment="Top" Width="100"/>
-        <TextBox x:Name="txtDebug" HorizontalAlignment="Left" Height="42" Margin="10,291,0,0" TextWrapping="Wrap" Text="" IsReadOnly="True" VerticalAlignment="Top" Width="488"/>
+        <TextBox x:Name="txtDebug" HorizontalAlignment="Left" Height="55" Margin="10,311,0,0" TextWrapping="Wrap" Text="" IsReadOnly="True" VerticalAlignment="Top" Width="488"/>
         <telerik:RadButton x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left" Margin="415,157,0,0" VerticalAlignment="Top" Width="83" Click="btnDelete_Click"/>
     </Grid>
 </Window>
