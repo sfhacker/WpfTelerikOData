@@ -1,4 +1,4 @@
-﻿
+
 namespace WpfApplication1.View
 {
     using com.cairone.odataexample;
@@ -6,6 +6,7 @@ namespace WpfApplication1.View
     using Microsoft.OData.Client;
     using System;
     using System.Windows;
+    using Telerik.Windows.Controls;
     using Telerik.Windows.Controls.GridView;
     using Telerik.Windows.Data;
 
@@ -47,21 +48,39 @@ namespace WpfApplication1.View
                 {
                     this.txtDebug.Text += string.Format("<-- Extra error info: {0}\r\n", e.Error.InnerException.Message);
                 }
+
+                // The DataPager control is still disabled!
+                // only when new item. Delete/Edit work fine.
+                if (this.dataServiceDataSource.HasChanges)
+                {
+                    this.dataServiceDataSource.RejectChanges();
+                }
             }
         }
 
         private void btnCancelAllChanges_Click(object sender, RoutedEventArgs e)
         {
-            this.dataServiceDataSource.CancelSubmit();
+            //this.dataServiceDataSource.CancelSubmit();
+            this.dataServiceDataSource.RejectChanges();
         }
 
         private void btnNewProvincia_New(object sender, RoutedEventArgs e)
         {
+            // it does not work any longer if we add filtering
+            // there problem was there are two constructors
             this.gridView.BeginInsert();
         }
 
+        /// <summary>
+        /// We need this event since there are two constructors
+        /// When the user clicks on 'New' button or presses Ins key
+        /// nothing happens if we do not add the code below.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void gridView_NewItem(object sender, Telerik.Windows.Controls.GridView.GridViewAddingNewEventArgs e)
         {
+            e.NewObject = new Provincia() { paisId = this.paisId };
         }
 
         private void gridView_CellEditEnded(object sender, Telerik.Windows.Controls.GridViewCellEditEndedEventArgs e)
@@ -77,18 +96,33 @@ namespace WpfApplication1.View
         {
         }
 
-        private void gridView_RowValidating(object sender, Telerik.Windows.Controls.GridViewRowValidatingEventArgs e)
-        {
-            // There is no need to add this validation here
-            // How to aviod sending rubbish to the OData Service?
-            // Just for testing
-        }
-
         private void gridView_RowEditEnded(object sender, Telerik.Windows.Controls.GridViewRowEditEndedEventArgs e)
         {
+            // if the user pressed ESC key
+            // after an INS key
             if (e.EditAction == GridViewEditAction.Cancel)
             {
+                if (e.Row.GetType() == typeof(Telerik.Windows.Controls.GridView.GridViewNewRow))
+                {
+                    (sender as RadGridView).Items.Remove(e.Row.Item);
+                }
+
                 return;
+            }
+            if (e.EditOperationType == GridViewEditOperationType.Insert)
+            {
+                var newData = e.NewData;
+                if (newData != null)
+                {
+                    if (e.EditAction == Telerik.Windows.Controls.GridView.GridViewEditAction.Commit)
+                    {
+                    }
+                }
+
+                return;
+            }
+            if (e.EditOperationType == GridViewEditOperationType.Edit)
+            {
             }
         }
 
@@ -98,10 +132,10 @@ namespace WpfApplication1.View
 
             if (this.paisId != -1)
             {
-                FilterDescriptor fd_paisId = new FilterDescriptor("paisId", FilterOperator.IsEqualTo, this.paisId);
-                if (!this.dataServiceDataSource.FilterDescriptors.Contains(fd_paisId))
+                FilterDescriptor fd_paisId = new FilterDescriptor("paisId", FilterOperator.IsEqualTo, this.paisId, false, typeof(int));
+                if (!this.gridView.FilterDescriptors.Contains(fd_paisId))
                 {
-                    this.dataServiceDataSource.FilterDescriptors.Add(fd_paisId);
+                    this.gridView.FilterDescriptors.Add(fd_paisId);
                 }
             }
         }
@@ -110,16 +144,6 @@ namespace WpfApplication1.View
         {
             if (e.Query != null)
             {
-                if (this.paisId != -1)
-                {
-                    
-                    FilterDescriptor fd_paisId = new FilterDescriptor("paisId", FilterOperator.IsEqualTo, this.paisId);
-                    if (!this.dataServiceDataSource.FilterDescriptors.Contains(fd_paisId))
-                    {
-                        //this.dataServiceDataSource.FilterDescriptors.Add(fd_paisId);
-                    }
-                }
-
                 this.txtDebug.Text = string.Format("--> Requesting {0}\r\n", e.Query.ToString());
             }
         }
@@ -154,6 +178,8 @@ namespace WpfApplication1.View
         {
             if (this.gridView.SelectedItems.Count == 0)
             {
+                System.Windows.MessageBox.Show("Debe seleccionar una provincia.", "Provincias", MessageBoxButton.OK, MessageBoxImage.Stop);
+
                 return;
             }
 
@@ -164,11 +190,15 @@ namespace WpfApplication1.View
                 itemsToRemove.Add(item);
             }
 
-            foreach (var item in itemsToRemove)
-            {
-                (this.gridView.ItemsSource as Telerik.Windows.Data.DataItemCollection).Remove(item);
-            }
+            MessageBoxResult rst = System.Windows.MessageBox.Show(string.Format("Esta seguro de querer eliminar {0} item(s)?", itemsToRemove.Count), "Provincias", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
+            if (rst == MessageBoxResult.Yes)
+            {
+                foreach (var item in itemsToRemove)
+                {
+                    (this.gridView.ItemsSource as Telerik.Windows.Data.DataItemCollection).Remove(item);
+                }
+            }
             // Can we issue a SubmitChanges() method here instead of clicking 'Save all'
         }
 
@@ -178,6 +208,8 @@ namespace WpfApplication1.View
             {
                 gridView.CurrentCell.IsSelected = false;
             }
+
+            //var alas = this.dataServiceDataSource.FilterDescriptors.Count;
         }
 
         private void gridView_RowLoaded(object sender, RowLoadedEventArgs e)
@@ -216,6 +248,29 @@ namespace WpfApplication1.View
             var citiesWin = new LocalidadesView(this.paisId, newProvincia.id);
 
             citiesWin.ShowDialog();
+        }
+
+        private void gridView_Filtering(object sender, GridViewFilteringEventArgs e)
+        {
+        }
+
+        private void gridView_RowValidating(object sender, Telerik.Windows.Controls.GridViewRowValidatingEventArgs e)
+        {
+            // There is no need to add this validation here
+            // How to aviod sending rubbish to the OData Service?
+            // Just for testing
+
+            var isValid = e.IsValid;
+
+        }
+        private void gridView_RowValidated(object sender, GridViewRowValidatedEventArgs e)
+        {
+            var count = e.ValidationResults.Count;
+        }
+
+        private void gridView_DataError(object sender, DataErrorEventArgs e)
+        {
+            var alas = e.Row;
         }
     }
 }
